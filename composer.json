@@ -1,5 +1,5 @@
 {
-    "name": "morebec/orkestra-bundle",
+    "name": "morebec/orkestra-symfony-bundle",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
@@ -29,6 +29,6 @@
         "phpunit/phpunit": "^9.1"
     },
     "autoload": {
-        "Morebec\\OrkestraBundle\\": "."
+        "Morebec\\OrkestraBundle\\": ""
     }
 }
