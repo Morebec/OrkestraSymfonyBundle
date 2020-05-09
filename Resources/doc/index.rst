@@ -1,12 +1,3 @@
-# Orkestra Symfony Bundle
-
-This bundle integrates Orkestra into Symfony so that you can bootstrap a Symfony + Orkestra based project quickly.
-
-## Compatibility
-The current version of this bundle has the following requirements:
- - PHP 7.3 or newer is required
- - Symfony 5.0
- 
 Installation
 ============
 
