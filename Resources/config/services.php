@@ -2,6 +2,9 @@
 
 namespace Morebec\OrkestraBundle\Resources\config;
 
+use Morebec\Orkestra\Messaging\MessageHandlerMap;
+use Morebec\Orkestra\Messaging\MessageHandlerProvider;
+use Morebec\Orkestra\Messaging\MessageHandlerResolver;
 use Morebec\OrkestraBundle\Console\ProcessEventQueueConsoleCommand;
 use Morebec\OrkestraBundle\Messaging\Middleware\AuditMessageMiddleware;
 use Morebec\OrkestraBundle\Messaging\Middleware\HandleMessageAndAllowNoHandlerMiddleware;
