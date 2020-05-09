@@ -29,6 +29,8 @@
         "phpunit/phpunit": "^9.1"
     },
     "autoload": {
-        "Morebec\\OrkestraBundle\\": ""
+	"psr-4":{
+	        "Morebec\\OrkestraBundle\\": ""
+	}
     }
 }
