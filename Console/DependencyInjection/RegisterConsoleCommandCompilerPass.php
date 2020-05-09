@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Monito\OrkestraBundle\Console\DependencyInjection;
+namespace Morebec\OrkestraBundle\Console\DependencyInjection;
 
 use Morebec\OrkestraBundle\Console\ApplicationConsoleCommandInterface;
 use ReflectionClass;

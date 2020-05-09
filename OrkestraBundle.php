@@ -2,7 +2,7 @@
 
 namespace Morebec\OrkestraBundle;
 
-use Morebec\Monito\OrkestraBundle\Console\DependencyInjection\RegisterConsoleCommandCompilerPass;
+use Morebec\OrkestraBundle\Console\DependencyInjection\RegisterConsoleCommandCompilerPass;
 use Morebec\OrkestraBundle\DependencyInjection\OrkestraExtension;
 use Morebec\OrkestraBundle\Messaging\DependencyInjection\RegisterMessageHandlersCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

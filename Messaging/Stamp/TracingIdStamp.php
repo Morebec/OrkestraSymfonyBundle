@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Monito\OrkestraBundle\Messaging\Stamp;
+namespace Morebec\OrkestraBundle\Messaging\Stamp;
 
 use Symfony\Component\Messenger\Stamp\StampInterface;
 
