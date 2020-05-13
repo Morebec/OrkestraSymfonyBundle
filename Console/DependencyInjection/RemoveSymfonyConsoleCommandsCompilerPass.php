@@ -9,7 +9,13 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class RegisterConsoleCommandCompilerPass implements CompilerPassInterface
+/**
+ * Removes the default console commands defined by symfony.
+ * This is to be used by the OrkestraConsoleKernel to create custom console utilities.
+ * Class RemoveSymfonyConsoleCommandsCompilerPass
+ * @package Morebec\OrkestraBundle\Console\DependencyInjection
+ */
+class RemoveSymfonyConsoleCommandsCompilerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}

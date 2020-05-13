@@ -2,7 +2,7 @@
 
 namespace Morebec\OrkestraBundle;
 
-use Morebec\OrkestraBundle\Console\DependencyInjection\RegisterConsoleCommandCompilerPass;
+use Morebec\OrkestraBundle\Console\DependencyInjection\RemoveSymfonyConsoleCommandsCompilerPass;
 use Morebec\OrkestraBundle\DependencyInjection\OrkestraExtension;
 use Morebec\OrkestraBundle\Messaging\DependencyInjection\RegisterMessageHandlersCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,7 +26,6 @@ class OrkestraBundle extends Bundle
 
         // Register compiler passes
         $container->addCompilerPass(new RegisterMessageHandlersCompilerPass($this->extension));
-        $container->addCompilerPass(new RegisterConsoleCommandCompilerPass());
     }
 
     /**
