@@ -88,8 +88,10 @@ abstract class OrkestraKernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
 
-        $routes->import($confDir.'/modules/user_account_management/routes.yaml'); //.self::CONFIG_EXTS, 'glob');
-        // $routes->import($confDir.'/{modules}/*/'.$this->environment.'/routes'.self::CONFIG_EXTS, 'glob');
+        $files = Finder::create()->in($this->getProjectDir().'/config/modules/*/')->name('routes.yaml')->files();
+        foreach ($files as $file) {
+            $routes->import($file->getRealPath());
+        }
     }
 
     /**
