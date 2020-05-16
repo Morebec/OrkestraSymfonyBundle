@@ -6,6 +6,7 @@ use Morebec\Orkestra\Messaging\Command\CommandBusInterface;
 use Morebec\Orkestra\Messaging\Command\CommandInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 /**
  * Class SymfonyCommandBus
@@ -29,7 +30,13 @@ class SymfonyCommandBus implements CommandBusInterface
     public function dispatch(CommandInterface $command)
     {
         try {
-            $this->bus->dispatch($command);
+            $enveloppe = $this->bus->dispatch($command);
+            /** @var HandledStamp $stamp */
+            $stamp = $enveloppe->last(HandledStamp::class);
+            if(!$stamp) {
+                return null;
+            }
+            return $stamp->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
