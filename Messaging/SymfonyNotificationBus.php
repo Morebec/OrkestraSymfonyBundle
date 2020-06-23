@@ -19,9 +19,9 @@ class SymfonyNotificationBus implements NotificationBusInterface
      */
     private $bus;
 
-    public function __construct(MessageBusInterface $eventBus)
+    public function __construct(MessageBusInterface $notificationBus)
     {
-        $this->bus = $eventBus;
+        $this->bus = $notificationBus;
     }
 
     /**

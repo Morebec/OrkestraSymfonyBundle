@@ -46,7 +46,7 @@ return static function (ContainerConfigurator $configurator) {
     $services->set(QueryBusInterface::class, SymfonyQueryBus::class)
         ->alias('orkestra.query_bus', QueryBusInterface::class);
     $services->set(EventBusInterface::class, SymfonyEventBus::class)
-        ->alias('orkestra.event_bus', QueryBusInterface::class);
+        ->alias('orkestra.event_bus', EventBusInterface::class);
     $services->set(NotificationBusInterface::class, SymfonyNotificationBus::class)
         ->alias('orkestra.notification_bus', NotificationBusInterface::class);
 
