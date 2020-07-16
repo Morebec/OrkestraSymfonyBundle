@@ -93,7 +93,7 @@ class RegisterMessageHandlersCompilerPass implements CompilerPassInterface
                 // Map Messages to handler methods
                 $messageHandlerClass = new ReflectionClass($class);
                 $handlerMethodsByMessageType = $this->mapHandlerMethodsByMessageType($messageHandlerClass, $messageClass);
-                $handlerMethodsByMessageTypeByBus[$busId] = array_merge($handlerMethodsByMessageTypeByBus[$busId], $handlerMethodsByMessageType);
+                $handlerMethodsByMessageTypeByBus[$busId] = array_merge_recursive($handlerMethodsByMessageTypeByBus[$busId], $handlerMethodsByMessageType);
 
                 // Register with handler provider
                 $handlerProvider->addMethodCall('addHandler', [new Reference($serviceId)]);
