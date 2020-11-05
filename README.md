@@ -42,10 +42,7 @@ return [
 #### Step 3: Add an Adapter
 For persistence and infrastructure concerns, Orkestra requires adapters.
 
-Install one of the adapters. Current Official Orkestra Adapters (such as the MongoDB adataper) are
-supported out of the box and will be registered correctly.
-
-Otherwise, you will need to register the classes of the adapter as services manually in a Module Configurator 
+Install one of the adapters and register the classes of the adapter as services in a Module Configurator 
 (see below for more information).
  
 ## Usage
