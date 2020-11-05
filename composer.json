@@ -1,0 +1,43 @@
+{
+    "name": "morebec/orkestra-symfony-bundle",
+    "description": "Symfony Bundle for the Orkestra Framework",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "jwillp",
+            "email": "jwilliam.perreault@morebec.com"
+        }
+    ],
+    "require": {
+        "morebec/orkestra": "1.*",
+        "symfony/dependency-injection": "5.*",
+        "symfony/framework-bundle": "5.*",
+        "symfony/config": "5.*",
+        "symfony/lock": "5.*",
+        "ext-pcntl": "*"
+    },
+    "require-dev": {
+        "morebec/orkestra-mongodb-adapter": "1.*",
+        "phpunit/phpunit": "^9.4",
+        "phpstan/phpstan": "^0.12.7",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "5.*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Morebec\\OrkestraSymfonyBundle\\": "."
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Morebec\\OrkestraSymfonyBundle\\": "Tests/"
+        }
+    }
+}
