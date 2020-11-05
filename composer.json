@@ -17,7 +17,6 @@
         "ext-pcntl": "*"
     },
     "require-dev": {
-        "morebec/orkestra-mongodb-adapter": "1.*",
         "phpunit/phpunit": "^9.4",
         "phpstan/phpstan": "^0.12.7",
         "friendsofphp/php-cs-fixer": "^2.16",
