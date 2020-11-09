@@ -16,7 +16,7 @@
         {"type": "git","url": "https://github.com/Morebec/Orkestra"}
     ],
     "require": {
-        "morebec/orkestra": "dev-dev",
+       "morebec/orkestra": "0.*",
         "symfony/config": "^5.0",
         "symfony/dependency-injection": "^5.0",
         "ext-pcntl": "*",
