@@ -63,6 +63,30 @@ class SymfonyOrkestraModuleContainerConfigurator
     }
 
     /**
+     * Adds a Process Manager service definition.
+     * COnfigured as autowired, autoconfigured, public and lazy
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return DomainMessageHandlerConfigurator
+     */
+    public function processManager(string $serviceId, ?string $serviceClass = null): DomainMessageHandlerConfigurator
+    {
+        return $this->messageHandler($serviceId, $serviceClass);
+    }
+
+    /**
+     * Adds a repository service definition.
+     * Configured as autowired, autoconfigured, public and lazy.
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return ServiceConfigurator
+     */
+    public function repository(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
+    {
+        return $this->service($serviceId, $serviceClass);
+    }
+
+    /**
      * Adds an query handler definition.
      * Configured as autowired, autoconfigured, public and lazy.
      * @param string $serviceId
