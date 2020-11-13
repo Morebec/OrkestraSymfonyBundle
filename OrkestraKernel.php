@@ -64,21 +64,30 @@ class OrkestraKernel extends BaseKernel
      */
     protected function configureModuleContainer(ContainerConfigurator $container): void
     {
-        $contents = require $this->getProjectDir().'/config/modules.php';
+        $modulesFile = $this->getProjectDir() . '/config/modules.php';
+
+        if (!file_exists($modulesFile)) {
+            throw new \LogicException(sprintf('The modules configuration file was not found at "%s"', $modulesFile));
+        }
+
+        $contents = require $modulesFile;
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                 $configuratorClassName = "{$class}";
+
                 if (!class_exists($configuratorClassName)) {
                     throw new \RuntimeException("Configurator '$class' could not be loaded. Did you correctly registered it with the autoloader?");
                 }
 
+                if (isset($this->moduleConfigurators[$configuratorClassName])) {
+                    throw new \LogicException(sprintf('Trying to load two module configurators with the same name: "%s"', $configuratorClassName));
+                }
+
                 /** @var SymfonyOrkestraModuleConfiguratorInterface $configurator */
                 $configurator = new $configuratorClassName();
-                $this->moduleConfigurators[] = $configurator;
+                $this->moduleConfigurators[$configuratorClassName] = $configurator;
 
                 $configurator->configureContainer($container);
-
-
             }
         }
     }
