@@ -39,9 +39,34 @@ class DomainMessageHandlerConfigurator
         $this->delegate->tag(self::DOMAIN_MESSAGING_HANDLER_TAG);
     }
 
+    /**
+     * Allows to automatically register this domain message handler with the router.
+     * @return AutoRoutedDomainMessageHandlerConfigurator
+     */
+    public function autoroute(): AutoRoutedDomainMessageHandlerConfigurator
+    {
+        $this->delegate->tag(AutoRoutedDomainMessageHandlerConfigurator::DOMAIN_MESSAGING_ROUTING_AUTOROUTE_TAG);
+        return new AutoRoutedDomainMessageHandlerConfigurator($this->container, $this->delegate, $this->serviceClass);
+    }
+
+    /**
+     * Creates a configuration that is specific to a tenant.
+     * @param string $tenantId
+     * @return TenantSpecificDomainMessageHandlerConfigurator
+     */
+    public function tenant(string $tenantId): TenantSpecificDomainMessageHandlerConfigurator
+    {
+        return new TenantSpecificDomainMessageHandlerConfigurator(
+            $this->container,
+            $this->delegate,
+            $tenantId,
+            $this->serviceClass
+        );
+    }
+
     public function public(): self
     {
-        $this->delegate->public()->public();
+        $this->delegate->public();
         return $this;
     }
 
@@ -55,16 +80,6 @@ class DomainMessageHandlerConfigurator
     {
         $this->delegate->autoconfigure();
         return $this;
-    }
-
-    /**
-     * Allows to automatically register this domain message handler with the router.
-     * @return AutoRoutedDomainMessageHandlerConfigurator
-     */
-    public function autoroute(): AutoRoutedDomainMessageHandlerConfigurator
-    {
-        $this->delegate->tag(AutoRoutedDomainMessageHandlerConfigurator::DOMAIN_MESSAGING_ROUTING_AUTOROUTE_TAG);
-        return new AutoRoutedDomainMessageHandlerConfigurator($this->container, $this->delegate, $this->serviceClass);
     }
 
     public function tag(string $name, array $attributes = []): self

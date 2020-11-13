@@ -3,7 +3,7 @@
 
 namespace Morebec\OrkestraSymfonyBundle\Module;
 
-
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
 
@@ -53,7 +53,58 @@ class AutoRoutedDomainMessageHandlerConfigurator
     public function tenant(string $tenantId): TenantSpecificDomainMessageHandlerConfigurator
     {
         return new TenantSpecificDomainMessageHandlerConfigurator(
-            $this->container, $this->delegate, $tenantId, $this->serviceClass
+            $this->container,
+            $this->delegate,
+            $tenantId,
+            $this->serviceClass
         );
+    }
+
+    public function public(): self
+    {
+        $this->delegate->public();
+        return $this;
+    }
+
+    public function tag(string $name, array $attributes = []): self
+    {
+        $this->delegate->tag($name, $attributes);
+        return $this;
+    }
+
+    public function decorate(?string $id, string $renamedId = null, int $priority = 0, int $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE): self
+    {
+        $this->delegate->decorate($id, $renamedId, $priority, $invalidBehavior);
+        return $this;
+    }
+
+    public function deprecate(): self
+    {
+        $this->delegate->deprecate();
+        return $this;
+    }
+
+    public function args(array $arguments): self
+    {
+        $this->delegate->args($arguments);
+        return $this;
+    }
+
+    public function alias(string $id, string $referenceId): self
+    {
+        $this->delegate->alias($id, $referenceId);
+        return $this;
+    }
+
+    public function lazy(bool $lazy = true): self
+    {
+        $this->delegate->lazy($lazy);
+        return $this;
+    }
+
+    public function share(bool $shared = true): self
+    {
+        $this->delegate->share($shared);
+        return $this;
     }
 }
