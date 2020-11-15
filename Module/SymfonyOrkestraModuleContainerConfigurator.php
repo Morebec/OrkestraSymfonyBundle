@@ -3,6 +3,7 @@
 namespace Morebec\OrkestraSymfonyBundle\Module;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ParametersConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 
@@ -31,11 +32,6 @@ class SymfonyOrkestraModuleContainerConfigurator
     {
         $this->container = $container;
         $this->services = $container->services();
-    }
-
-    public function services(): ServicesConfigurator
-    {
-        return $this->services;
     }
 
     /**
@@ -128,17 +124,6 @@ class SymfonyOrkestraModuleContainerConfigurator
     }
 
     /**
-     * Registers a service
-     * @param string $serviceId
-     * @param string|null $serviceClass
-     * @return ServiceConfigurator
-     */
-    public function service(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
-    {
-        return $this->services->set($serviceId, $serviceClass);
-    }
-
-    /**
      * Registers an upcaster
      * @param string $serviceId
      * @param string|null $serviceClass
@@ -158,5 +143,26 @@ class SymfonyOrkestraModuleContainerConfigurator
     public function projector(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
     {
         return $this->services->set($serviceId, $serviceClass)->tag(self::PROJECTOR_TAG);
+    }
+    
+    /**
+     * Registers a service
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return ServiceConfigurator
+     */
+    public function service(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
+    {
+        return $this->services->set($serviceId, $serviceClass);
+    }
+
+    public function services(): ServicesConfigurator
+    {
+        return $this->services;
+    }
+
+    public function parameters(): ParametersConfigurator
+    {
+        return $this->container->parameters();
     }
 }
