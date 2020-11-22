@@ -112,18 +112,6 @@ class SymfonyOrkestraModuleContainerConfigurator
     }
 
     /**
-     * Configures a console command.
-     * @param string $className
-     */
-    public function consoleCommand(string $className): ServiceConfigurator
-    {
-        return $this->services
-            ->set($className)
-            ->tag('console.command')
-        ;
-    }
-
-    /**
      * Registers an upcaster
      * @param string $serviceId
      * @param string|null $serviceClass
@@ -143,6 +131,31 @@ class SymfonyOrkestraModuleContainerConfigurator
     public function projector(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
     {
         return $this->services->set($serviceId, $serviceClass)->tag(self::PROJECTOR_TAG);
+    }
+
+    /**
+     * Configures a console command.
+     * @param string $className
+     */
+    public function consoleCommand(string $className): ServiceConfigurator
+    {
+        return $this->services
+            ->set($className)
+            ->tag('console.command')
+            ;
+    }
+
+    /**
+     * Registers a controller.
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return ServiceConfigurator
+     */
+    public function controller(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
+    {
+        return $this->services
+            ->set($serviceId, $serviceClass)
+            ->tag('controller.service_arguments');
     }
 
     /**
