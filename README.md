@@ -1,6 +1,8 @@
 # Orkestra Symfony Bundle
 This bundle integrates the Orkestra Framework with Symfony 5.
 
+[![Build Status](https://travis-ci.com/Morebec/OrkestraSymfonyBundle.svg?branch=v1.x)](https://travis-ci.com/Morebec/OrkestraSymfonyBundle)
+
 ## Installation
 
 ### Applications that use Symfony Flex
