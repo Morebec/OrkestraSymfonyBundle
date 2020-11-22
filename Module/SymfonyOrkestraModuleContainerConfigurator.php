@@ -144,7 +144,7 @@ class SymfonyOrkestraModuleContainerConfigurator
     {
         return $this->services->set($serviceId, $serviceClass)->tag(self::PROJECTOR_TAG);
     }
-    
+
     /**
      * Registers a service
      * @param string $serviceId

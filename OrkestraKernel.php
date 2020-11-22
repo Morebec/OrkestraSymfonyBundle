@@ -17,14 +17,23 @@ class OrkestraKernel extends BaseKernel
     use MicroKernelTrait;
 
     /**
+     * List of the Module Configurators.
      * @var SymfonyOrkestraModuleConfiguratorInterface[]
      */
     private $moduleConfigurators;
-    
+
+    /**
+     * Indicates if the module configurators were loaded or not.
+     * @var bool
+     */
+    private $moduleConfiguratorsLoaded;
+
+
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
         $this->moduleConfigurators = [];
+        $this->moduleConfiguratorsLoaded = false;
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
@@ -59,10 +68,31 @@ class OrkestraKernel extends BaseKernel
     }
 
     /**
-     * Configures the Orkestra Modules.
+     * Configures the container using the Orkestra Module Configurators.
      * @param ContainerConfigurator $container
      */
     protected function configureModuleContainer(ContainerConfigurator $container): void
+    {
+        foreach ($this->getModuleConfigurators() as $moduleConfigurator) {
+            $moduleConfigurator->configureContainer($container);
+        }
+    }
+
+    /**
+     * Configures the routes using the Orkestra Module Configurators.
+     * @param RoutingConfigurator $routes
+     */
+    protected function configureModuleRoutes(RoutingConfigurator $routes)
+    {
+        foreach ($this->getModuleConfigurators() as $moduleConfigurator) {
+            $moduleConfigurator->configureRoutes($routes);
+        }
+    }
+
+    /**
+     * Loads the module configurators and saves them in memory.
+     */
+    protected function loadModuleConfigurators(): void
     {
         $modulesFile = $this->getProjectDir() . '/config/modules.php';
 
@@ -86,16 +116,22 @@ class OrkestraKernel extends BaseKernel
                 /** @var SymfonyOrkestraModuleConfiguratorInterface $configurator */
                 $configurator = new $configuratorClassName();
                 $this->moduleConfigurators[$configuratorClassName] = $configurator;
-
-                $configurator->configureContainer($container);
             }
         }
+
+        $this->moduleConfiguratorsLoaded = true;
     }
 
-    private function configureModuleRoutes(RoutingConfigurator $routes)
+    /**
+     * Returns the list of module configurators.
+     * @return SymfonyOrkestraModuleConfiguratorInterface[]
+     */
+    public function getModuleConfigurators(): array
     {
-        foreach ($this->moduleConfigurators as $moduleConfigurator) {
-            $moduleConfigurator->configureRoutes($routes);
+        if (!$this->moduleConfiguratorsLoaded) {
+            $this->loadModuleConfigurators();
         }
+
+        return $this->moduleConfigurators;
     }
 }
