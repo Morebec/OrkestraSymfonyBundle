@@ -155,5 +155,50 @@ and add your `NormalizerInterface` and `DenormalizerInterface` in the `configure
 The `SymfonyOrkestraModuleContainerConfigurator` provides a method to automatically register validators: 
 `SymfonyOrkestraModuleContainerConfigurator::messageValidator`.
 
-This is done behind the scene through tags and autowiring of tags.
+This is done behind the scene through tags and autowiring of tagged services.
+
+Orkestra does not provide a default implementation of a Validation library simply a set of interfaces.
+Here's an example of a validator using Symfony's Validator:
+
+```php
+class SandboxCommandValidator implements DomainMessageValidatorInterface
+{
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    public function validate(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers): DomainMessageValidationErrorList
+    {
+        /** @var SandboxCommand $command */
+        $command = $domainMessage;
+
+
+        $metadata = $this->validator->getMetadataFor(SandboxCommand::class);
+        $metadata->addPropertyConstraint('userId', new Assert\NotBlank());
+
+        $errors = $this->validator->validate($command);
+
+        $c = (new Collection($errors))
+            ->map(static function (ConstraintViolation $v) {
+                return new DomainMessageValidationError($v->getMessage(), $v->getPropertyPath(), $v->getInvalidValue());
+            })
+            ->flatten()
+        ;
+
+        return new DomainMessageValidationErrorList($c);
+    }
+
+    public function supports(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers): bool
+    {
+        return $domainMessage instanceof SandboxCommand;
+    }
+}
+```
+
 
