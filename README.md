@@ -100,7 +100,7 @@ return [
 ];
 ``` 
 > Module Configurations are registered just like Symfony Bundles allowing you to provide the environment in which they should exist.
-> If you need different configurator on a per environment basis you can simply check for the environment using `$_ENV['APP_ENV]` in the configurators code.
+> If you need a different configurator on a per environment basis, you can simply check for the environment using `$_ENV['APP_ENV]` in the configurators code.
 
 #### Step 3: Configure Adapter
 As previously explained Orkestra requires adapters in order to support infrastructure concerns.
@@ -150,3 +150,10 @@ message handlers.
 The message bus can be configured to receive more `NormalizerInterface` and `DenormalizerInterface` as per your needs.
 Simply create a new class implementing `DomainMessageNormalizerConfiguratorInterface` registered with the service container 
 and add your `NormalizerInterface` and `DenormalizerInterface` in the `configure` method.
+
+### Adding Validators
+The `SymfonyOrkestraModuleContainerConfigurator` provides a method to automatically register validators: 
+`SymfonyOrkestraModuleContainerConfigurator::messageValidator`.
+
+This is done behind the scene through tags and autowiring of tags.
+

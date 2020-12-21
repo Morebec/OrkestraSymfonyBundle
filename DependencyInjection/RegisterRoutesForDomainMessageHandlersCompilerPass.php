@@ -3,12 +3,13 @@
 
 namespace Morebec\OrkestraSymfonyBundle\DependencyInjection;
 
-
 use Morebec\Orkestra\Messaging\Routing\DomainMessageHandlerRouteBuilder;
 use Morebec\Orkestra\Messaging\Routing\DomainMessageRouteCollection;
 use Morebec\Orkestra\Messaging\Routing\DomainMessageRouterInterface;
 use Morebec\Orkestra\Messaging\Routing\Tenant\TenantSpecificMessageHandlerRouteBuilder;
 use Morebec\OrkestraSymfonyBundle\Module\AutoRoutedDomainMessageHandlerConfigurator;
+use Morebec\OrkestraSymfonyBundle\Module\DomainMessageHandlerConfigurator;
+use Morebec\OrkestraSymfonyBundle\Module\SymfonyOrkestraModuleContainerConfigurator;
 use Morebec\OrkestraSymfonyBundle\Module\TenantSpecificDomainMessageHandlerConfigurator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -39,7 +40,7 @@ class RegisterRoutesForDomainMessageHandlersCompilerPass implements CompilerPass
 
         $routes = new DomainMessageRouteCollection();
 
-        $messageHandlerIds = $container->findTaggedServiceIds('domain.messaging.handler');
+        $messageHandlerIds = $container->findTaggedServiceIds(DomainMessageHandlerConfigurator::DOMAIN_MESSAGING_HANDLER_TAG);
 
         foreach ($messageHandlerIds as $serviceId => $_) {
             $definition = $container->getDefinition($serviceId);
@@ -79,11 +80,9 @@ class RegisterRoutesForDomainMessageHandlersCompilerPass implements CompilerPass
                 }
             }
 
-            if(!$autoroute) {
+            if (!$autoroute) {
                 continue;
             }
-
-
             if (empty($tenantIds)) {
                 $builder = DomainMessageHandlerRouteBuilder::forDomainMessageHandler($serviceId);
                 foreach ($disabledMethods as $disabledMethod) {
@@ -92,7 +91,7 @@ class RegisterRoutesForDomainMessageHandlersCompilerPass implements CompilerPass
 
                 $routes->addAll($builder->build());
             } else {
-                foreach($tenantIds as $tenantId) {
+                foreach ($tenantIds as $tenantId) {
                     $builder = TenantSpecificMessageHandlerRouteBuilder::forDomainMessageHandler($tenantId, $serviceId);
                     foreach ($disabledMethods as $disabledMethod) {
                         $builder->withMethodDisabled($disabledMethod);

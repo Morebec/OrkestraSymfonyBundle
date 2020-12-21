@@ -9,8 +9,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurato
 
 class AutoRoutedDomainMessageHandlerConfigurator
 {
-    public const DOMAIN_MESSAGING_ROUTING_AUTOROUTE_TAG = 'domain.messaging.routing.autoroute';
-    public const DOMAIN_MESSAGING_ROUTING_DISABLED_METHOD_TAG = 'domain.messaging.routing.disabled_method';
+    public const DOMAIN_MESSAGING_ROUTING_AUTOROUTE_TAG = 'orkestra.domain.messaging.routing.autoroute';
+    public const DOMAIN_MESSAGING_ROUTING_DISABLED_METHOD_TAG = 'orkestra.domain.messaging.routing.disabled_method';
 
     /**
      * @var ServiceConfigurator

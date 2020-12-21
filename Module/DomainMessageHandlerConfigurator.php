@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurato
  */
 class DomainMessageHandlerConfigurator
 {
-    public const DOMAIN_MESSAGING_HANDLER_TAG = 'domain.messaging.handler';
+    public const DOMAIN_MESSAGING_HANDLER_TAG = 'orkestra.domain.messaging.handler';
 
     /**
      * @var ServiceConfigurator

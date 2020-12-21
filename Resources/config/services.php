@@ -3,9 +3,21 @@
 use Morebec\Orkestra\DateTime\ClockInterface;
 use Morebec\Orkestra\DateTime\SystemClock;
 use Morebec\Orkestra\EventSourcing\EventProcessor\EventProcessorWorker;
+use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\EventSourcing\Projecting\EventStoreProjectionist;
 use Morebec\Orkestra\EventSourcing\Projecting\ProjectionistInterface;
+use Morebec\Orkestra\EventSourcing\Projecting\ProjectorStateStorageInterface;
+use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStorageReaderInterface;
+use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStorageWriterInterface;
+use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStore;
 use Morebec\Orkestra\EventSourcing\Upcasting\UpcasterChain;
+use Morebec\Orkestra\InMemoryAdapter\InMemoryDomainMessageSchedulerStorage;
+use Morebec\Orkestra\InMemoryAdapter\InMemoryPersonalInformationStore;
+use Morebec\Orkestra\InMemoryAdapter\InMemoryProjectorStateStorage;
+use Morebec\Orkestra\InMemoryAdapter\InMemorySimpleEventStoreStorage;
+use Morebec\Orkestra\Messaging\Authorization\AuthorizationDecisionMakerInterface;
+use Morebec\Orkestra\Messaging\Authorization\AuthorizeDomainMessageMiddleware;
+use Morebec\Orkestra\Messaging\Authorization\VetoAuthorizationDecisionMaker;
 use Morebec\Orkestra\Messaging\Context\BuildDomainContextMiddleware;
 use Morebec\Orkestra\Messaging\Context\DomainContextManager;
 use Morebec\Orkestra\Messaging\Context\DomainContextManagerInterface;
@@ -22,14 +34,17 @@ use Morebec\Orkestra\Messaging\Routing\ContainerDomainMessageHandlerProvider;
 use Morebec\Orkestra\Messaging\Routing\DomainMessageHandlerProviderInterface;
 use Morebec\Orkestra\Messaging\Routing\DomainMessageRouterInterface;
 use Morebec\Orkestra\Messaging\Routing\HandleDomainMessageMiddleware;
+use Morebec\Orkestra\Messaging\Routing\RouteDomainMessageMiddleware;
 use Morebec\Orkestra\Messaging\Routing\Tenant\TenantAwareDomainMessageRouter;
 use Morebec\Orkestra\Messaging\Scheduling\DomainMessageScheduler;
 use Morebec\Orkestra\Messaging\Scheduling\DomainMessageSchedulerInterface;
 use Morebec\Orkestra\Messaging\Scheduling\DomainMessageSchedulerStorageInterface;
 use Morebec\Orkestra\Messaging\Scheduling\DomainMessageSchedulerWorker;
 use Morebec\Orkestra\Messaging\Scheduling\ScheduleDomainMessageMiddleware;
+use Morebec\Orkestra\Messaging\Validation\ValidateDomainMessageMiddleware;
 use Morebec\Orkestra\Normalization\ObjectNormalizer;
 use Morebec\Orkestra\Normalization\ObjectNormalizerInterface;
+use Morebec\Orkestra\Privacy\PersonalInformationStoreInterface;
 use Morebec\OrkestraSymfonyBundle\Command\DebugDomainMessageRouter;
 use Morebec\OrkestraSymfonyBundle\Command\RunDomainMessageSchedulerWorkerConsoleCommand;
 use Morebec\OrkestraSymfonyBundle\Command\RunEventProcessorWorkerConsoleCommand;
@@ -72,11 +87,19 @@ return static function (ContainerConfigurator $configurator) {
     $services->set(DomainContextManagerInterface::class, DomainContextManager::class);
     $services->set(DomainContextProviderInterface::class, DomainContextProvider::class);
 
-
     $services->set(LoggerMiddleware::class)->tag('monolog.logger', ['channel' => 'domain']);
 
 
-    $services->set(HandleDomainMessageMiddleware::class)->tag('monolog.logger', ['channel' => 'domain']);
+    $services->set(ValidateDomainMessageMiddleware::class)
+        ->args([tagged_iterator(SymfonyOrkestraModuleContainerConfigurator::DOMAIN_MESSAGE_VALIDATOR)])
+    ;
+
+
+    $services->set(AuthorizationDecisionMakerInterface::class, VetoAuthorizationDecisionMaker::class)
+        ->args([tagged_iterator(SymfonyOrkestraModuleContainerConfigurator::DOMAIN_MESSAGE_AUTHORIZER)])
+    ;
+    $services->set(AuthorizeDomainMessageMiddleware::class);
+
     $services->set(DomainMessageHandlerProviderInterface::class, ContainerDomainMessageHandlerProvider::class);
     $services->set(DomainMessageRouterInterface::class, TenantAwareDomainMessageRouter::class)
         ->configurator([service(DomainMessageRouterConfiguratorInterface::class), 'configure'])
@@ -89,6 +112,10 @@ return static function (ContainerConfigurator $configurator) {
     $services->set(ScheduleDomainMessageMiddleware::class)->tag('monolog.logger', ['channel' => 'domain']);
     $services->set(DomainMessageSchedulerInterface::class, DomainMessageScheduler::class);
     $services->set(DomainMessageSchedulerStorageInterface::class, CachedDomainMessageSchedulerStorage::class);
+
+    $services->set(RouteDomainMessageMiddleware::class);
+
+    $services->set(HandleDomainMessageMiddleware::class)->tag('monolog.logger', ['channel' => 'domain']);
 
     // Upcasting
     $services->set(UpcasterChain::class)->args([tagged_iterator(SymfonyOrkestraModuleContainerConfigurator::UPCASTER_TAG)]);
@@ -117,4 +144,12 @@ return static function (ContainerConfigurator $configurator) {
 
     $services->set(RunProjectionistWorkerConsoleCommand::class)->tag('console.command');
     $services->set(DebugDomainMessageRouter::class)->tag('console.command');
+
+    // Default In Memory Adapter
+    $services->set(EventStoreInterface::class, SimpleEventStore::class);
+    $services->set(DomainMessageSchedulerStorageInterface::class, InMemoryDomainMessageSchedulerStorage::class);
+    $services->set(PersonalInformationStoreInterface::class, InMemoryPersonalInformationStore::class);
+    $services->set(SimpleEventStorageReaderInterface::class, InMemorySimpleEventStoreStorage::class);
+    $services->set(SimpleEventStorageWriterInterface::class, InMemorySimpleEventStoreStorage::class);
+    $services->set(ProjectorStateStorageInterface::class, InMemoryProjectorStateStorage::class);
 };

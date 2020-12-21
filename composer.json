@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "morebec/orkestra": "1.*",
+        "morebec/orkestra": "1.x-dev",
         "symfony/dependency-injection": "5.*",
         "symfony/framework-bundle": "5.*",
         "symfony/config": "5.*",

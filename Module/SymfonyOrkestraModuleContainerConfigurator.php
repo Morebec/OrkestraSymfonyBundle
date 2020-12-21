@@ -13,10 +13,16 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurat
 class SymfonyOrkestraModuleContainerConfigurator
 {
     /** @var string */
-    public const UPCASTER_TAG = 'upcaster';
+    public const UPCASTER_TAG = 'orkestra.upcaster';
 
     /** @var string */
-    public const PROJECTOR_TAG = 'projector';
+    public const PROJECTOR_TAG = 'orkestra.projector';
+
+    /** @var string */
+    public const DOMAIN_MESSAGE_VALIDATOR = 'orkestra.domain_message_validator';
+
+    /** @var string */
+    public const DOMAIN_MESSAGE_AUTHORIZER = 'orkestra.domain_message_authorizer';
 
     /**
      * @var ContainerConfigurator
@@ -109,6 +115,28 @@ class SymfonyOrkestraModuleContainerConfigurator
         );
         $conf->public()->lazy()->autoconfigure()->autowire();
         return $conf;
+    }
+
+    /**
+     * Configures a Domain Message Validator.
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return ServiceConfigurator
+     */
+    public function messageValidator(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
+    {
+        return $this->service($serviceId, $serviceClass)->tag(self::DOMAIN_MESSAGE_VALIDATOR);
+    }
+
+    /**
+     * Configures a Domain Message Authorizer.
+     * @param string $serviceId
+     * @param string|null $serviceClass
+     * @return ServiceConfigurator
+     */
+    public function messageAuthorizer(string $serviceId, ?string $serviceClass = null): ServiceConfigurator
+    {
+        return $this->service($serviceId, $serviceClass)->tag(self::DOMAIN_MESSAGE_AUTHORIZER);
     }
 
     /**
