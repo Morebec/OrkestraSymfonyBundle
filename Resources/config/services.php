@@ -46,9 +46,10 @@ use Morebec\Orkestra\Normalization\ObjectNormalizer;
 use Morebec\Orkestra\Normalization\ObjectNormalizerInterface;
 use Morebec\Orkestra\Privacy\PersonalInformationStoreInterface;
 use Morebec\OrkestraSymfonyBundle\Command\DebugDomainMessageRouter;
+use Morebec\OrkestraSymfonyBundle\Command\ProjectionistConsoleCommand;
 use Morebec\OrkestraSymfonyBundle\Command\RunDomainMessageSchedulerWorkerConsoleCommand;
 use Morebec\OrkestraSymfonyBundle\Command\RunEventProcessorWorkerConsoleCommand;
-use Morebec\OrkestraSymfonyBundle\Command\RunProjectionistWorkerConsoleCommand;
+use Morebec\OrkestraSymfonyBundle\Command\ResetProjectorsConsoleCommand;
 use Morebec\OrkestraSymfonyBundle\DependencyInjection\ChainedDomainMessageNormalizerConfigurator;
 use Morebec\OrkestraSymfonyBundle\DependencyInjection\ChainedDomainMessageRouterConfigurator;
 use Morebec\OrkestraSymfonyBundle\DependencyInjection\DefaultDomainMessageBusConfigurator;
@@ -142,7 +143,7 @@ return static function (ContainerConfigurator $configurator) {
     $services->set(RunDomainMessageSchedulerWorkerConsoleCommand::class)->tag('console.command');
 
 
-    $services->set(RunProjectionistWorkerConsoleCommand::class)->tag('console.command');
+    $services->set(ProjectionistConsoleCommand::class)->tag('console.command');
     $services->set(DebugDomainMessageRouter::class)->tag('console.command');
 
     // Default In Memory Adapter
